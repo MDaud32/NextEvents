@@ -11,6 +11,7 @@ import Button from '../../lib/button';
 
 const EventItems = (props) => {
   const { title, image, date, location, id } = props;
+
   const humanReadbleDate = new Date(date).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
@@ -20,22 +21,23 @@ const EventItems = (props) => {
   const formatLocation = location.replace(', ', '\n');
 
   const exploreLink = `/events/${id}`;
+
   return (
-    <Center key={id} mt={4} alignItems={'center'} py='12'>
+    <Center key={id} alignItems={'center'} py='12'>
       <Box
         role={'group'}
         p={6}
         maxW={'330px'}
         w={'full'}
-        bg={useColorModeValue('gray.200', 'gray.400')}
+        bg={useColorModeValue('gray.300', 'gray.400')}
         boxShadow={'2xl'}
-        rounded={'lg'}
+        rounded={'xl'}
         pos={'relative'}
         zIndex={1}
       >
         <Box
-          rounded={'lg'}
-          mt={-12}
+          rounded={'xl'}
+          mt={-10}
           pos={'relative'}
           height={'230px'}
           _after={{
@@ -72,19 +74,29 @@ const EventItems = (props) => {
           >
             {title}
           </Heading>
-          <Heading fontSize={'xl'} fontFamily={'body'} fontWeight={500}>
+          <Heading
+            fontSize={'xl'}
+            fontFamily={'body'}
+            fontWeight={500}
+            color={useColorModeValue('gray.900', 'gray.700')}
+          >
             {humanReadbleDate}
           </Heading>
           <Stack direction={'row'} align={'center'}>
-            <Text fontWeight={600} fontSize={'lg'}>
+            <Text
+              fontWeight={700}
+              fontSize={'lg'}
+              color={useColorModeValue('gray.700', 'gray.900')}
+            >
               {formatLocation}
             </Text>
             <Box
               fontSize={'sm'}
-              fontWeight={600}
+              fontWeight={700}
               rounded={'full'}
               bg={useColorModeValue('blue.600', 'blue.400')}
-              color={'white'}
+              color={useColorModeValue('white', 'gray.900')}
+              transform={'auto'}
               px='4'
               py='3'
               boxShadow={
@@ -92,6 +104,7 @@ const EventItems = (props) => {
               }
               _hover={{
                 bg: 'blue.500',
+                translateY: '1',
               }}
               _focus={{
                 bg: 'blue.500',

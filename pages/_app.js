@@ -1,4 +1,4 @@
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { Box, ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import theme from '../theme';
 import '../styles/globals.css';
 import Nav from '../components/nav.js/navbar';
