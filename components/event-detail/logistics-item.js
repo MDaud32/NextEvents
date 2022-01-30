@@ -1,15 +1,25 @@
-import classes from './logistics-item.module.css';
+import { Box, IconButton, useColorModeValue } from '@chakra-ui/react';
 
 function LogisticsItem(props) {
   const { icon: Icon } = props;
 
   return (
-    <li className={classes.item}>
-      <span className={classes.icon}>
-        <Icon />
-      </span>
-      <span className={classes.content}>{props.children}</span>
-    </li>
+    <Box
+      display={'flex'}
+      fontSize={24}
+      alignItems={'start'}
+      flexDirection={'column'}
+      textAlign={'center'}
+      color={'#aefff8'}
+    >
+      <Box>
+        <IconButton
+          colorScheme={useColorModeValue('white', 'cyan')}
+          icon={<Icon />}
+        />
+      </Box>
+      <Box>{props.children}</Box>
+    </Box>
   );
 }
 

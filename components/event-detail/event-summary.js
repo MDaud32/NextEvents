@@ -1,12 +1,20 @@
-import classes from './event-summary.module.css';
+import { Box, Text } from '@chakra-ui/react';
 
 function EventSummary(props) {
   const { title } = props;
 
   return (
-    <section className={classes.summary}>
-      <h1>{title}</h1>
-    </section>
+    <Box w={'full'} h={'40'} bg={'#008b79'}>
+      <Text
+        pt={3}
+        fontSize={80}
+        textAlign={'center'}
+        textShadow={'2xl'}
+        color={'white'}
+      >
+        {title}
+      </Text>
+    </Box>
   );
 }
 
