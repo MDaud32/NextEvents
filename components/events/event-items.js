@@ -7,7 +7,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import Image from 'next/image';
-import Button from '../../lib/button';
+import UsableButton from '../../lib/button';
 
 const EventItems = (props) => {
   const { title, image, date, location, id } = props;
@@ -111,7 +111,7 @@ const EventItems = (props) => {
               }}
               className='whitespace-nowrap'
             >
-              <Button link={exploreLink}>Explore Event</Button>
+              <UsableButton link={exploreLink}>Explore Event</UsableButton>
             </Box>
           </Stack>
         </Stack>
