@@ -18,7 +18,7 @@ const ResultTitle = (props) => {
       py={'8'}
     >
       <Text as='h1' fontSize={'2xl'} fontWeight={'700'} pb={'4'}>
-        Events in {humanReadableDate}
+        Events In {humanReadableDate}
       </Text>
       <Box
         fontSize={'lg'}
