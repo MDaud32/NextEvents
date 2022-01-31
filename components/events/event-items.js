@@ -91,11 +91,11 @@ const EventItems = (props) => {
               {formatLocation}
             </Text>
             <Box
-              fontSize={'sm'}
-              fontWeight={700}
+              fontSize={'md'}
+              fontWeight={600}
               rounded={'full'}
-              bg={useColorModeValue('blue.600', 'blue.400')}
-              color={useColorModeValue('white', 'gray.900')}
+              bg={useColorModeValue('green.500', 'green.400')}
+              color={useColorModeValue('gray.800', 'white')}
               transform={'auto'}
               px='4'
               py='3'
@@ -103,11 +103,12 @@ const EventItems = (props) => {
                 '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
               }
               _hover={{
-                bg: 'blue.500',
+                bg: 'green.600',
                 translateY: '1',
+                color: 'gray.200',
               }}
               _focus={{
-                bg: 'blue.500',
+                bg: 'green.600',
               }}
               className='whitespace-nowrap'
             >
