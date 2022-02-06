@@ -1,10 +1,11 @@
-import { Text } from '@chakra-ui/react';
+import { Text, Box } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getFilteredEvents } from '../../dummy-data';
 
 import EventsList from '../../components/events/event-list';
 import ResultTitle from '../../components/events/result-page';
+import UsableButton from '../../lib/button';
 
 export default function FilteredEvents() {
   const router = useRouter();
@@ -29,7 +30,50 @@ export default function FilteredEvents() {
     numMonth < 1 ||
     numMonth > 12
   ) {
-    return <Text>Invalid filter. please adjust your value!</Text>;
+    return (
+      <Box
+        display={'grid'}
+        flexDirection={'column'}
+        justifyItems={'center'}
+        textAlign={'center'}
+        py={'8'}
+        gap={'4'}
+      >
+        <Text
+          p={'6'}
+          bg={'red.300'}
+          rounded='lg'
+          fontWeight={'semibold'}
+          fontSize={'2xl'}
+        >
+          Invalid filter. please adjust your value!
+        </Text>
+        <Box
+          fontSize={'lg'}
+          fontWeight={700}
+          rounded={'full'}
+          bg={'green.400'}
+          color={'gray.800'}
+          transform={'auto'}
+          px='4'
+          py='3'
+          boxShadow={
+            '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+          }
+          _hover={{
+            bg: 'green.600',
+            translateY: '1',
+            color: 'gray.200',
+          }}
+          _focus={{
+            bg: 'green.600',
+          }}
+          className='whitespace-nowrap'
+        >
+          <UsableButton link='/events'>Show All Events</UsableButton>
+        </Box>
+      </Box>
+    );
   }
 
   const filteredEvents = getFilteredEvents({
@@ -38,7 +82,50 @@ export default function FilteredEvents() {
   });
 
   if (!filteredEvents || filteredEvents.length === 0) {
-    return <Text>no events found for the chosen filter!</Text>;
+    return (
+      <Box
+        display={'grid'}
+        flexDirection={'column'}
+        justifyItems={'center'}
+        textAlign={'center'}
+        py={'8'}
+        gap={'4'}
+      >
+        <Text
+          p={'6'}
+          bg={'red.300'}
+          rounded='lg'
+          fontWeight={'semibold'}
+          fontSize={'2xl'}
+        >
+          No events found for the chosen filter!
+        </Text>
+        <Box
+          fontSize={'lg'}
+          fontWeight={700}
+          rounded={'full'}
+          bg={'green.400'}
+          color={'gray.800'}
+          transform={'auto'}
+          px='4'
+          py='3'
+          boxShadow={
+            '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+          }
+          _hover={{
+            bg: 'green.600',
+            translateY: '1',
+            color: 'gray.200',
+          }}
+          _focus={{
+            bg: 'green.600',
+          }}
+          className='whitespace-nowrap'
+        >
+          <UsableButton link='/events'>Show All Events</UsableButton>
+        </Box>
+      </Box>
+    );
   }
   const date = new Date(numYear, numMonth - 1);
   return (
