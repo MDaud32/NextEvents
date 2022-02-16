@@ -1,10 +1,9 @@
 import { Box } from '@chakra-ui/react';
+import { getFeaturedEvents } from '../components/halper/api-util';
 import Head from 'next/head';
 import EventsList from '../components/events/event-list';
-import { getFeaturedEvents } from '../dummy-data';
 
-export default function Home() {
-  const featuredEvents = getFeaturedEvents();
+export default function Home(props) {
   return (
     <Box>
       <Head>
@@ -13,8 +12,17 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Box>
-        <EventsList items={featuredEvents} />
+        <EventsList items={props.events} />
       </Box>
     </Box>
   );
+}
+
+export async function getStaticProps() {
+  const featuredEvents = await getFeaturedEvents();
+  return {
+    props: {
+      events: featuredEvents,
+    },
+  };
 }
