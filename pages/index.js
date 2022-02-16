@@ -18,11 +18,11 @@ export default function Home(props) {
   );
 }
 
-export async function getStaticProps() {
+export const getStaticProps = async () => {
   const featuredEvents = await getFeaturedEvents();
   return {
     props: {
       events: featuredEvents,
     },
   };
-}
+};

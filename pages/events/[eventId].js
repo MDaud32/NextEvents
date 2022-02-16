@@ -1,5 +1,4 @@
-import { getEventById } from '../../dummy-data';
-import { useRouter } from 'next/router';
+import { getEventById, getAllEvents } from '../../components/halper/api-util';
 import { Fragment } from 'react';
 import EventContent from '../../components/event-detail/event-content';
 import EventSummary from '../../components/event-detail/event-summary';
@@ -7,10 +6,8 @@ import EventLogistics from '../../components/event-detail/event-logistics';
 import UsableButton from '../../lib/button';
 import { Box, Text } from '@chakra-ui/react';
 
-const EventsDetail = () => {
-  const router = useRouter();
-  const eventId = router.query.eventId;
-  const event = getEventById(eventId);
+const EventsDetail = (props) => {
+  const event = props.selectedEvent;
 
   if (!event) {
     return (
@@ -72,6 +69,25 @@ const EventsDetail = () => {
       </EventContent>
     </Fragment>
   );
+};
+export const getStaticProps = async (context) => {
+  const eventId = context.params.eventId;
+
+  const event = await getEventById(eventId);
+  return {
+    props: {
+      selectedEvent: event,
+    },
+  };
+};
+
+export const getStaticPaths = async () => {
+  const events = await getAllEvents();
+  const paths = events.map((event) => ({ params: { eventId: event.id } }));
+  return {
+    paths: paths,
+    fallback: false,
+  };
 };
 
 export default EventsDetail;
