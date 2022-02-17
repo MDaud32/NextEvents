@@ -1,4 +1,7 @@
-import { getEventById, getAllEvents } from '../../components/halper/api-util';
+import {
+  getEventById,
+  getFeaturedEvents,
+} from '../../components/halper/api-util';
 import { Fragment } from 'react';
 import EventContent from '../../components/event-detail/event-content';
 import EventSummary from '../../components/event-detail/event-summary';
@@ -26,7 +29,7 @@ const EventsDetail = (props) => {
           fontWeight={'semibold'}
           fontSize={'2xl'}
         >
-          No Event Found!
+          Loading...
         </Text>
         <Box
           fontSize={'lg'}
@@ -78,15 +81,16 @@ export const getStaticProps = async (context) => {
     props: {
       selectedEvent: event,
     },
+    revalidate: 30,
   };
 };
 
 export const getStaticPaths = async () => {
-  const events = await getAllEvents();
+  const events = await getFeaturedEvents();
   const paths = events.map((event) => ({ params: { eventId: event.id } }));
   return {
     paths: paths,
-    fallback: false,
+    fallback: true,
   };
 };
 
