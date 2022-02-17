@@ -1,35 +1,28 @@
 import { Text, Box } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { getFilteredEvents } from '../../dummy-data';
+import { getFilteredEvents } from '../../components/halper/api-util';
 
 import EventsList from '../../components/events/event-list';
 import ResultTitle from '../../components/events/result-page';
 import UsableButton from '../../lib/button';
 
-export default function FilteredEvents() {
+export default function FilteredEvents(props) {
   const router = useRouter();
 
-  const filterData = router.query.slug;
+  // const filterData = router.query.slug;
 
-  if (!filterData) {
-    return <Text>Loading...</Text>;
-  }
+  // if (!filterData) {
+  //   return <Text>Loading...</Text>;
+  // }
 
-  const filteredYear = filterData[0];
-  const filteredMonth = filterData[1];
+  // const filteredYear = filterData[0];
+  // const filteredMonth = filterData[1];
 
-  const numYear = +filteredYear;
-  const numMonth = +filteredMonth;
+  // const numYear = +filteredYear;
+  // const numMonth = +filteredMonth;
 
-  if (
-    isNaN(numYear) ||
-    isNaN(numMonth) ||
-    numYear > 2030 ||
-    numYear < 2021 ||
-    numMonth < 1 ||
-    numMonth > 12
-  ) {
+  if (props.hasError) {
     return (
       <Box
         display={'grid'}
@@ -76,10 +69,7 @@ export default function FilteredEvents() {
     );
   }
 
-  const filteredEvents = getFilteredEvents({
-    year: numYear,
-    month: numMonth,
-  });
+  const filteredEvents = props.events;
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
@@ -127,7 +117,7 @@ export default function FilteredEvents() {
       </Box>
     );
   }
-  const date = new Date(numYear, numMonth - 1);
+  const date = new Date(props.date.year, props.date.month - 1);
   return (
     <div>
       <Head>
@@ -140,3 +130,40 @@ export default function FilteredEvents() {
     </div>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const { params } = context;
+  const filterData = params.slug;
+  const filteredYear = filterData[0];
+  const filteredMonth = filterData[1];
+
+  const numYear = +filteredYear;
+  const numMonth = +filteredMonth;
+  if (
+    isNaN(numYear) ||
+    isNaN(numMonth) ||
+    numYear > 2030 ||
+    numYear < 2021 ||
+    numMonth < 1 ||
+    numMonth > 12
+  ) {
+    return {
+      props: { hasError: true },
+      // notFound: true,
+    };
+  }
+
+  const filteredEvents = await getFilteredEvents({
+    year: numYear,
+    month: numMonth,
+  });
+  return {
+    props: {
+      events: filteredEvents,
+      date: {
+        year: numYear,
+        month: numMonth,
+      },
+    },
+  };
+};
