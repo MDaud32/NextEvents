@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Text, Box } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -6,23 +7,49 @@ import { getFilteredEvents } from '../../components/halper/api-util';
 import EventsList from '../../components/events/event-list';
 import ResultTitle from '../../components/events/result-page';
 import UsableButton from '../../lib/button';
+import useSWR from 'swr';
 
 export default function FilteredEvents(props) {
+  const [loadedEvents, setLoadedEvents] = useState();
+
   const router = useRouter();
 
-  // const filterData = router.query.slug;
+  const filterData = router.query.slug;
+  const { data, error } = useSWR(
+    'https://nextjs-events-28c94-default-rtdb.firebaseio.com/events.json'
+  );
 
-  // if (!filterData) {
-  //   return <Text>Loading...</Text>;
-  // }
+  useEffect(() => {
+    if (data) {
+      const events = [];
+      for (const key in data) {
+        eventFormate.push({
+          id: key,
+          ...data[key],
+        });
+      }
+      setLoadedEvents(events);
+    }
+  }, [data]);
 
-  // const filteredYear = filterData[0];
-  // const filteredMonth = filterData[1];
+  if (!filterData) {
+    return <Text>Loading...</Text>;
+  }
 
-  // const numYear = +filteredYear;
-  // const numMonth = +filteredMonth;
+  const filteredYear = filterData[0];
+  const filteredMonth = filterData[1];
 
-  if (props.hasError) {
+  const numYear = +filteredYear;
+  const numMonth = +filteredMonth;
+  if (
+    isNaN(numYear) ||
+    isNaN(numMonth) ||
+    numYear > 2030 ||
+    numYear < 2021 ||
+    numMonth < 1 ||
+    numMonth > 12 ||
+    error
+  ) {
     return (
       <Box
         display={'grid'}
@@ -69,7 +96,13 @@ export default function FilteredEvents(props) {
     );
   }
 
-  const filteredEvents = props.events;
+  const filteredEvents = loadedEvents.filtere((event) => {
+    const eventDate = new Date(event.date);
+    return (
+      eventDate.getFullYear() === numYear &&
+      eventDate.getMonth() === numMonth - 1
+    );
+  });
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
@@ -117,7 +150,7 @@ export default function FilteredEvents(props) {
       </Box>
     );
   }
-  const date = new Date(props.date.year, props.date.month - 1);
+  const date = new Date(numYear, numMonth - 1);
   return (
     <div>
       <Head>
@@ -131,39 +164,39 @@ export default function FilteredEvents(props) {
   );
 }
 
-export const getServerSideProps = async (context) => {
-  const { params } = context;
-  const filterData = params.slug;
-  const filteredYear = filterData[0];
-  const filteredMonth = filterData[1];
+// export const getServerSideProps = async (context) => {
+//   const { params } = context;
+//   const filterData = params.slug;
+//   const filteredYear = filterData[0];
+//   const filteredMonth = filterData[1];
 
-  const numYear = +filteredYear;
-  const numMonth = +filteredMonth;
-  if (
-    isNaN(numYear) ||
-    isNaN(numMonth) ||
-    numYear > 2030 ||
-    numYear < 2021 ||
-    numMonth < 1 ||
-    numMonth > 12
-  ) {
-    return {
-      props: { hasError: true },
-      // notFound: true,
-    };
-  }
+//   const numYear = +filteredYear;
+//   const numMonth = +filteredMonth;
+//   if (
+//     isNaN(numYear) ||
+//     isNaN(numMonth) ||
+//     numYear > 2030 ||
+//     numYear < 2021 ||
+//     numMonth < 1 ||
+//     numMonth > 12
+//   ) {
+//     return {
+//       props: { hasError: true },
+//       // notFound: true,
+//     };
+//   }
 
-  const filteredEvents = await getFilteredEvents({
-    year: numYear,
-    month: numMonth,
-  });
-  return {
-    props: {
-      events: filteredEvents,
-      date: {
-        year: numYear,
-        month: numMonth,
-      },
-    },
-  };
-};
+//   const filteredEvents = await getFilteredEvents({
+//     year: numYear,
+//     month: numMonth,
+//   });
+//   return {
+//     props: {
+//       events: filteredEvents,
+//       date: {
+//         year: numYear,
+//         month: numMonth,
+//       },
+//     },
+//   };
+// };
